@@ -15,5 +15,5 @@ documentation = "https://docs.rs/opus/0.3.0/opus"
 
 edition = "2015"
 
-[dependencies]
-audiopus_sys = "0.2.0"
+[build-dependencies]
+bindgen = "0.72"
