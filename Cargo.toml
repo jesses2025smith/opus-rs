@@ -15,5 +15,9 @@ documentation = "https://docs.rs/opus/0.3.0/opus"
 
 edition = "2015"
 
+[lib]
+crate-type = ["lib", "cdylib"]
+
 [build-dependencies]
 bindgen = "0.72"
+cc = "1.2"
