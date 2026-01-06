@@ -83,8 +83,10 @@ pub enum Channels {
 /// The available bandwidth level settings.
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
 #[repr(i32)]
+#[derive(Default)]
 pub enum Bandwidth {
 	/// Auto/default setting.
+	#[default]
 	Auto = ffi::OPUS_AUTO,
 	/// 4kHz bandpass.
 	Narrowband = OPUS_BANDWIDTH_NARROWBAND,
@@ -120,12 +122,6 @@ impl Bandwidth {
 
 	fn raw(self) -> i32 {
 		self as i32
-	}
-}
-
-impl Default for Bandwidth {
-	fn default() -> Self {
-		Bandwidth::Auto
 	}
 }
 
@@ -205,8 +201,10 @@ impl Bitrate {
 /// Possible signal types. Hints for the encoder's mode selection.
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(i32)]
+#[derive(Default)]
 pub enum Signal {
 	/// Auto/default setting.
+	#[default]
 	Auto = ffi::OPUS_AUTO,
 	/// Bias thresholds towards choosing LPC or Hybrid modes.
 	Voice = OPUS_SIGNAL_VOICE,
@@ -229,15 +227,10 @@ impl Signal {
 	}
 }
 
-impl Default for Signal {
-	fn default() -> Self {
-		Signal::Auto
-	}
-}
-
 /// Possible frame sizes. Controls encoder's use of variable duration frames.
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 #[repr(i32)]
+#[derive(Default)]
 pub enum FrameSize {
 	/// Select frame size from the argument (default).
 	Arg = OPUS_FRAMESIZE_ARG,
@@ -280,12 +273,6 @@ impl FrameSize {
 
 	fn raw(self) -> i32 {
 		self as i32
-	}
-}
-
-impl Default for FrameSize {
-	fn default() -> Self {
-		FrameSize::Arg
 	}
 }
 
@@ -679,7 +666,10 @@ macro_rules! encoder_ctls {
 			pub fn get_expert_frame_duration(&mut self) -> Result<FrameSize> {
 				let mut value: i32 = 0;
 				ctl!($fn, self, ffi::OPUS_GET_EXPERT_FRAME_DURATION_REQUEST, &mut value);
-				FrameSize::from_raw(value, concat!(stringify!($fn), "(OPUS_GET_EXPERT_FRAME_DURATION)"))
+				FrameSize::from_raw(
+					value,
+					concat!(stringify!($fn), "(OPUS_GET_EXPERT_FRAME_DURATION)"),
+				)
 			}
 
 			/// If set to true, disables almost all use of prediction, making frames almost completely independent.
@@ -895,7 +885,7 @@ pub mod packet {
 	}
 
 	/// Parse an Opus packet into one or more frames.
-	pub fn parse(packet: &'_ [u8]) -> Result<Packet<'_>> {
+	pub fn parse(packet: &[u8]) -> Result<Packet<'_>> {
 		let mut toc: u8 = 0;
 		let mut frames = [ptr::null(); 48];
 		let mut sizes = [0i16; 48];
