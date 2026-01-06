@@ -15,7 +15,7 @@ repository = "https://github.com/SpaceManiac/opus-rs"
 edition = "2015"
 
 [lib]
-name = "opus_rs"
+# name = "opus_rs"
 crate-type = ["lib", "cdylib"]
 
 [build-dependencies]
