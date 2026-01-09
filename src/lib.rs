@@ -233,6 +233,7 @@ impl Signal {
 #[derive(Default)]
 pub enum FrameSize {
 	/// Select frame size from the argument (default).
+	#[default]
 	Arg = OPUS_FRAMESIZE_ARG,
 	/// Use 2.5 ms frames.
 	Ms2_5 = OPUS_FRAMESIZE_2_5_MS,
